@@ -23,13 +23,11 @@ class CouponController
     
     public function create(Request $request)
     {
-      
-        
         
         $rules = [
             'code' => 'unique:coupons,code',
             'amount' => 'required|numeric',
-            'currency' => 'required|in:UGX,KES,GHS',
+            'currency' => 'required|in:UGX,KES,GHS,NGN',
             'valid_from' => 'nullable|date_format:Y-m-d',
             'valid_till' => 'nullable|date_format:Y-m-d',
             'location_longitude' => 'required_with:location_latitude',
@@ -50,7 +48,8 @@ class CouponController
         
         $code = $request->input('code');
         if($code == "" || $code == NULL){
-           $code = HelperService::generate_new_coupon_code();
+            // If the user doesn't pass a code for the coupon, generate a generic one
+            $code = HelperService::generate_new_coupon_code();
         }
 
         $description = $request->input('description');
@@ -62,12 +61,14 @@ class CouponController
         $valid_till = $request->input('valid_till');
 
         if($valid_till){
-            $todays_date = date("Y-m-d"); 
+            $todays_date = date("Y-m-d");
+            // Check if the valid till is earlier than today. 
             if ($todays_date > $valid_till) {
                 throw new FailedRequestException('Coupon Validity cannot be earlier than today');
             }
         }
         if($valid_from && $valid_till){
+            // Minor check to ensure valid from date is not after valid till date. 
             if ($valid_from > $valid_till) {
                 throw new FailedRequestException('Coupon Validity start date must be earlier than the end date');
             }
@@ -77,6 +78,7 @@ class CouponController
         $location_latitude = $request->input('location_latitude');
         $location_radius = $request->input('location_radius');
 
+        // The idea to limit the number of times users can apply the coupon, this wasn't implemented
         $quantity = $request->input('quantity') ? $request->input('quantity') : 0;
         $status = $request->input('status') ? $request->input('status') : 'active';
            
@@ -122,6 +124,7 @@ class CouponController
         
         foreach ($filters as $key => $filter) {
             if ($filter != NULL) {
+                // This is a simple filter function, ideally, you can use a switch function to have different kinds of where checks for specific keys. 
                 $query->where($key,'=',$filter);
             }
         }
@@ -166,6 +169,7 @@ class CouponController
         $code = $request->input('code');
         $origin_latitude = $request->input('origin_latitude');
         $origin_longitude = $request->input('origin_longitude');
+
         $destination_latitude = $request->input('destination_latitude');
         $destination_longitude = $request->input('destination_longitude');
         
@@ -173,7 +177,7 @@ class CouponController
 
         if($coupon->status != 'active'){
             $coupon_validity_status = false;
-            throw new FailedRequestException('Coupon is no more active');
+            throw new FailedRequestException('Coupon is no longer active');
         }
 
         if($coupon->valid_till){
@@ -184,18 +188,23 @@ class CouponController
             }
         }
 
-        $is_origin_in_radius = HelperService::is_in_location_radius($coupon->location_radius, $coupon->location_longitude,$coupon->location_latitude, $origin_longitude , $origin_latitude);
-        $is_destination_in_radius = HelperService::is_in_location_radius($coupon->location_radius, $coupon->location_longitude,$coupon->location_latitude, $destination_longitude , $destination_latitude);
-        
-        if( $is_origin_in_radius == false && $is_destination_in_radius == false){
-            $coupon_validity_status = false;
-            throw new FailedRequestException('This coupon is not valid for your desired route');
+        if($coupon->location_radius && $coupon->location_longitude && $coupon->location_latitude){
+            //Check if the origin coordinates is in the radius of the event location
+            $is_origin_in_radius = HelperService::is_in_location_radius($coupon->location_radius, $coupon->location_longitude,$coupon->location_latitude, $origin_longitude , $origin_latitude);
+            
+            //Check if the destination coordinates is in the radius of the event location
+            $is_destination_in_radius = HelperService::is_in_location_radius($coupon->location_radius, $coupon->location_longitude,$coupon->location_latitude, $destination_longitude , $destination_latitude);
+            
+            if( $is_origin_in_radius == false && $is_destination_in_radius == false){
+                $coupon_validity_status = false;
+                throw new FailedRequestException('This coupon is not valid for your desired route');
+            }
         }
 
        
         return Response::json([
             'status' => "success",
-            'message' => "",
+            'message' => '',
             'data' => [
                 'coupon' => $coupon,
                 'valid' => $coupon_validity_status,
@@ -204,6 +213,6 @@ class CouponController
                     ['latitude' => $destination_latitude,'longitude' => $destination_longitude],
                 ],
             ]
-        ]);
+            ]);
     }
 }

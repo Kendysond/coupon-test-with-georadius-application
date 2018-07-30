@@ -1,0 +1,200 @@
+{
+	"info": {
+		"_postman_id": "97a5066e-c8de-4294-b9be-8f848f7b87a3",
+		"name": "Coupon Generation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "List Coupons",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://{{URL}}/api/coupons",
+					"protocol": "http",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"coupons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Coupon",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "currency",
+							"value": "UGX",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "amount",
+							"value": "100",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "code",
+							"value": "TEDEX2019",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "valid_from",
+							"value": "2018-07-09",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "valid_till",
+							"value": "2018-07-31",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "location_radius",
+							"value": "4",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "location_longitude",
+							"value": "3.472844",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "location_latitude",
+							"value": "6.455153",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "quantity",
+							"value": "0",
+							"description": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{URL}}/api/coupons/create",
+					"protocol": "http",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"coupons",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Coupons - Filtered",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "http://{{URL}}/api/coupons?status=active",
+					"protocol": "http",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"coupons"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "active"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Apply Coupon",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "code",
+							"value": "SB1IG427J9",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "origin_latitude",
+							"value": "3.472844",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "origin_longitude",
+							"value": "6.455153",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "destination_latitude",
+							"value": "6.455153",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "destination_longitude",
+							"value": "3.442948",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{URL}}/api/coupons/apply",
+					"protocol": "http",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"coupons",
+						"apply"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
