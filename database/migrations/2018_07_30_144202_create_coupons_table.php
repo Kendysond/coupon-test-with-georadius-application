@@ -17,7 +17,9 @@ class CreateCouponsTable extends Migration
             $table->increments('id');
             
             $table->string('code');
-            $table->string('description');
+
+            $table->string('description')->nullable();
+
             $table->decimal('amount', 11, 2)->default(0);
             $table->string('currency')->default('UGX');
            

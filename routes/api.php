@@ -16,3 +16,6 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::get('/coupons', 'CouponController@list');
+Route::post('/coupons/create', 'CouponController@create');
+Route::post('/coupons/apply', 'CouponController@apply');
