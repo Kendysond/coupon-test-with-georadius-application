@@ -15,7 +15,8 @@ Ensure you configure your DB, then
 - `php artisan migrate`
 
 
-### Tasks to be done
+### The idea
+Company A wants to give out promo codes worth x amount during events so people can get free rides to and from the event. The flaw with that is people can use the promo codes without going for the event. 
 
 - [x] Generation of new promo codes for events
 - [x] The promo code is worth a specific amount of ride
