@@ -51,7 +51,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        // return parent::render($request, $exception);
+          return parent::render($request, $exception);
 
         if ($exception instanceof FatalThrowableError) {
             return response()->json([

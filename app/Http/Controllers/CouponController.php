@@ -20,6 +20,13 @@ use Carbon\Carbon;
 class CouponController
 {
 
+    public function index(Request $request)
+    {
+        $post_id = $request->get("id", 0);
+        // dd($post_id);
+        $coupon = Coupon::find($post_id);
+        return $coupon->code;
+    }
     
     public function create(Request $request)
     {
@@ -215,4 +222,6 @@ class CouponController
             ]
             ]);
     }
+
+
 }

@@ -25,4 +25,8 @@ class Coupon extends Model
         'id','deleted_at'
     ];
 
+    public function getCodeAttribute($value)
+    {
+        return ucfirst($value);
+    }
 }
